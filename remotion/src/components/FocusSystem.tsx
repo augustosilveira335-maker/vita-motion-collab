@@ -14,15 +14,22 @@ export const SpotlightMask: React.FC<{
   progress: number;
   radius?: number;
   color?: string;
-}> = ({x, y, width, height, progress, radius = 14, color = '#ffffff'}) => {
+  blur?: number;
+}> = ({x, y, width, height, progress, radius = 14, color = '#ffffff', blur = 3.2}) => {
   const dim = 0.48 * progress;
   const panel = 'rgba(5,12,17,.82)';
+  const soften = blur * progress;
+  const band = {
+    background: panel,
+    opacity: dim,
+    backdropFilter: soften > 0.05 ? `blur(${soften.toFixed(2)}px)` : undefined,
+  };
   return (
     <Interactive.Div name="Sistema de foco seletivo" style={{position: 'absolute', inset: 0, zIndex: 30, pointerEvents: 'none'}}>
-      <div style={{position: 'absolute', left: 0, top: 0, width: 1600, height: Math.max(0, y), background: panel, opacity: dim}} />
-      <div style={{position: 'absolute', left: 0, top: y, width: Math.max(0, x), height, background: panel, opacity: dim}} />
-      <div style={{position: 'absolute', left: x + width, top: y, right: 0, height, background: panel, opacity: dim}} />
-      <div style={{position: 'absolute', left: 0, top: y + height, width: 1600, bottom: 0, background: panel, opacity: dim}} />
+      <div style={{position: 'absolute', left: 0, top: 0, width: 1600, height: Math.max(0, y), ...band}} />
+      <div style={{position: 'absolute', left: 0, top: y, width: Math.max(0, x), height, ...band}} />
+      <div style={{position: 'absolute', left: x + width, top: y, right: 0, height, ...band}} />
+      <div style={{position: 'absolute', left: 0, top: y + height, width: 1600, bottom: 0, ...band}} />
       <div
         style={{
           position: 'absolute',
@@ -53,6 +60,10 @@ export const ScreenCursor: React.FC<{
   const ys = points.map(([, , y]) => y);
   const click = clicks.find((at) => frame >= at && frame <= at + 10);
   const ripple = click === undefined ? 0 : interpolate(frame, [click, click + 10], [0, 1], clamp);
+  const approach = clicks.reduce(
+    (value, at) => Math.max(value, interpolate(frame, [at - 9, at - 2, at], [0, 1, 0], clamp)),
+    0,
+  );
   return (
     <Interactive.Div
       name="Cursor e ripple no espaço da interface"
@@ -63,7 +74,7 @@ export const ScreenCursor: React.FC<{
         zIndex: 50,
         translate: `${interpolate(frame, frames, xs, {...clamp, easing: Easing.bezier(.16, 1, .3, 1)})}px ${interpolate(frame, frames, ys, {...clamp, easing: Easing.bezier(.16, 1, .3, 1)})}px`,
         opacity: interpolate(frame, [showFrom, showFrom + 7, hideAt - 7, hideAt], [0, 1, 1, 0], clamp),
-        scale: click === undefined ? 1 : interpolate(frame, [click, click + 2, click + 7], [1, .78, 1], {...clamp, easing: Easing.spring({damping: 17}), output: 'perceptual-scale'}),
+        scale: click === undefined ? 1 + approach * .07 : interpolate(frame, [click, click + 2, click + 7], [1, .78, 1], {...clamp, easing: Easing.spring({damping: 17}), output: 'perceptual-scale'}),
         filter: 'drop-shadow(0 7px 10px rgba(0,0,0,.46))',
         color,
       }}
