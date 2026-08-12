@@ -27,7 +27,7 @@ export const MyComposition: React.FC = () => (
       {...scene}
     />
     <Folder name="Cenas-V8-editaveis">
-      <Composition id="01-Abertura" component={ChaosScene} durationInFrames={180} {...scene} />
+      <Composition id="01-Abertura" component={ChaosScene} durationInFrames={204} {...scene} />
       <Composition id="02-Tempo" component={TimeOrbit} durationInFrames={150} {...scene} />
       <Composition id="03-OS-unica" component={OSFlowScene} durationInFrames={180} {...scene} />
       <Composition id="04-Etapas" component={StageFlowScene} durationInFrames={210} {...scene} />

@@ -71,7 +71,7 @@ export const VitaMotionV8: React.FC = () => (
       <TransitionSeries.Transition presentation={fade()} timing={timing} />
       <TransitionSeries.Sequence durationInFrames={240} name="Novo chamado"><HeldScene component={NewTicketScene} freezeAt={145} /></TransitionSeries.Sequence>
       <TransitionSeries.Transition presentation={fade()} timing={timing} />
-      <TransitionSeries.Sequence durationInFrames={165} name="Profissional certo"><HeldScene component={ProfessionalMatchScene} freezeAt={75} /></TransitionSeries.Sequence>
+      <TransitionSeries.Sequence durationInFrames={165} name="Profissional certo"><HeldScene component={ProfessionalMatchScene} freezeAt={82} /></TransitionSeries.Sequence>
       <TransitionSeries.Transition presentation={fade()} timing={timing} />
       <TransitionSeries.Sequence durationInFrames={210} name="Orçamento no celular"><HeldScene component={BudgetScene} freezeAt={146} /></TransitionSeries.Sequence>
       <TransitionSeries.Transition presentation={fade()} timing={timing} />
