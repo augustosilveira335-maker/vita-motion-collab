@@ -1,5 +1,6 @@
 import {AbsoluteFill, Easing, Interactive, interpolate, useCurrentFrame} from 'remotion';
 import {ScreenCursor, SpotlightMask} from '../components/FocusSystem';
+import {SceneCamera} from '../components/CameraRig';
 import {DashboardMock} from '../components/VitaInterface';
 
 const clamp={extrapolateLeft:'clamp' as const,extrapolateRight:'clamp' as const};
@@ -21,12 +22,12 @@ export const DashboardScene:React.FC=()=>{
   return <AbsoluteFill style={{background:'#09151e',overflow:'hidden',perspective:1800}}>
     <Interactive.Div name="Fundo do produto" style={{position:'absolute',inset:0,background:'radial-gradient(circle at 50% 40%,rgba(35,142,160,.24),transparent 43%),linear-gradient(180deg,#0a1821,#09131a)',opacity:interpolate(frame,[0,12],[0,1],clamp)}}/>
     <Interactive.Div name="Luz diagonal" style={{position:'absolute',left:-300,top:-250,width:950,height:1500,background:'linear-gradient(90deg,transparent,rgba(77,213,216,.1),transparent)',rotate:'-29deg',filter:'blur(16px)',translate:interpolate(frame,[0,135],['0px 0px','820px 0px'],clamp)}}/>
-    <Interactive.Div name="Câmera do Dashboard" style={{position:'absolute',left:160,top:90,width:1600,height:900,transformOrigin:'50% 50%',translate:interpolate(frame,[0,31,98,116,135],['0px 70px','0px 0px','0px 0px','-28px -10px','-46px -18px'],{...clamp,easing:ease}),scale:interpolate(frame,[0,31,98,116,135],[.78,.91,.91,.95,.98],{...clamp,easing:ease,output:'perceptual-scale'}),rotate:interpolate(frame,[0,31],['-1.8deg','0deg'],{...clamp,easing:ease}),opacity:interpolate(frame,[0,12,129,135],[0,1,1,0],clamp)}}>
+    <SceneCamera boundary={5} motionDurationInFrames={125} hold={[104, 0.95, -20, -8]} name="Câmera contínua do Dashboard">
       <DashboardMock buttonPulse={pulse}/>
       <SpotlightMask x={12} y={188+active*50} width={236} height={47} progress={navFocus} radius={11} color="#48cfd3"/>
       <SpotlightMask x={1295} y={42} width={253} height={75} progress={buttonFocus} radius={14} color="#ffffff"/>
       <ScreenCursor points={[[15,1180,720],[31,185,211],[45,185,261],[59,185,311],[73,185,361],[87,185,411],[111,1415,78],[126,1415,78],[134,1460,110]]} clicks={[126]} showFrom={12} hideAt={135}/>
-    </Interactive.Div>
+    </SceneCamera>
     <Interactive.Div name="Legenda dinâmica do Dashboard" style={{position:'absolute',left:88,bottom:145,width:560,color:'#f2f8f9',opacity:interpolate(frame,[20,32,105,116],[0,1,1,0],clamp),translate:interpolate(frame,[20,36],['0px 22px','0px 0px'],{...clamp,easing:ease})}}>
       <div style={{fontSize:13,letterSpacing:2.8,color:'#47cfd3',fontWeight:850}}>{labels[active][0]}</div>
       <div style={{fontFamily:'Plus Jakarta Sans',fontSize:42,fontWeight:800,letterSpacing:-1.5,marginTop:10}}>{labels[active][1]}</div>
