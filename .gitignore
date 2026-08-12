@@ -1,0 +1,11 @@
+node_modules/
+out/
+renders/
+qa/
+qa-stills/
+*.mp4
+*.zip
+*.log
+.DS_Store
+.env*
+!.env.example
